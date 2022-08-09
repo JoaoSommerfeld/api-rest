@@ -17,8 +17,22 @@ router.get('/', (req, res, next) => {
                         error: error
                     })
                 }
-
-                return res.status(200).send({ response:  resultado });
+                const response = {
+                    quantidade: resultado.length,
+                    produtosItem: resultado.map(produto => {
+                        return {
+                            id: produto.id,
+                            nome: produto.nome,
+                            preco: produto.preco,
+                            request: {
+                                tipo: 'GET',
+                                descricao: 'Retorna os detalhes de um produto específico',
+                                url: process.env.URL_PRODUTOS + produto.id
+                            }
+                        }
+                    })
+                }
+                return res.status(200).send(response);
             }            
         )
     });
@@ -40,8 +54,24 @@ router.get('/:id', (req, res, next) => {
                         error: error
                     })
                 }
-
-                return res.status(200).send({ response:  resultado });
+                if(resultado == 0) {
+                    return res.status(404).send({
+                        mensagem: 'Produto não encontrado com este ID'
+                    })
+                }
+                const response = {
+                    produto: {
+                        id: resultado[0].id,
+                        nome: resultado[0].nome,
+                        preco: resultado[0].preco, 
+                        request: {
+                            tipo: 'GET',
+                            descricao: 'Retorna todos os produtos cadastrados',
+                            url: process.env.URL_PRODUTOS
+                        }                       
+                    }
+                }
+                return res.status(200).send(response);
             }
         )
     }) 
@@ -66,10 +96,20 @@ router.post('/', (req, res, next) => {
                         response: null
                     })
                 }
-                res.status(201).send({
-                    mensagem: 'Produto inserico com sucesso',
-                    id_produto: resultado.insertId
-                });
+                const response = {
+                    mensagem: 'Produto inserido com sucesso',
+                    produtoCriado: {
+                        id: resultado.insertId,
+                        nome: req.body.nome,
+                        preco: req.body.preco,
+                        request: {
+                            tipo: 'POST',
+                            descricao: 'Insere um produto',
+                            url: process.env.URL_PRODUTOS
+                        }
+                    }
+                }
+                return res.status(201).send(response);
             }
         )
     });
@@ -103,9 +143,21 @@ router.patch('/', (req, res, next) => {
                         response: null
                     })
                 }
-                res.status(202).send({
-                    mensagem: 'Alterado com sucesso!'
-                });
+
+                const response = {
+                    mensagem: 'Produto alterado com sucesso.',
+                    produtoAtualizado: {
+                        id: req.body.id,
+                        nome: req.body.nome,
+                        preco: req.body.preco,
+                        request: {
+                            tipo: 'PACH',
+                            descricao: 'Retorna os detalhes de um produto específico.',
+                            url: process.env.URL_PRODUTOS + req.body.id
+                        }
+                    }                   
+                }
+                return res.status(202).send(response); 
             }
         )
     });
@@ -130,9 +182,15 @@ router.delete('/', (req, res, next) => {
                         response: null
                     })
                 }
-                res.status(202).send({
-                    mensagem: 'Removido com sucesso!'
-                });
+                const response = {
+                    mensagem: 'Produto removido com sucesso',
+                    request: {
+                        tipo: 'POST',
+                        descricao: 'Insere um produto',
+                        url: process.env.URL_PRODUTOS
+                    }
+                }
+                return res.status(202).send(response);
             }
         )
     });
