@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 
-const rotaProdutos = require('./routes/produtos');
+const rotaProdutos = require('./src/routes/produtos');
 
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));

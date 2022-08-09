@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require('../mysql').pool;
+const mysql = require('../database/mysql').pool;
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/'});
 
 router.get('/', (req, res, next) => {
     mysql.getConnection((error, conn) => {
@@ -175,6 +177,8 @@ router.delete('/', (req, res, next) => {
             [req.body.id],
             (error, resultado, fields) => {
                 conn.release();
+
+                console.log('resultado', resultado)
 
                 if(error){
                     return res.status(500).send({
