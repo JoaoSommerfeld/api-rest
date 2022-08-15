@@ -4,6 +4,7 @@ const morgan = require('morgan');
 
 const rotaProdutos = require('./src/routes/produtos');
 const rotaUsurarios = require('./src/routes/usuarios');
+const rotaBlog = require('./src/routes/blog');
 
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'));
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
 
 app.use('/produtos', rotaProdutos);
 app.use('/usuarios', rotaUsurarios);
+app.use('/blog', rotaBlog);
 
 app.use((req, res, next) => {
     const erro = new Error('Não encontrado');
