@@ -1,2 +1,2 @@
 # api-rest
-Aprendizado
+Exercício =>  Criação de uma API REST com NodeJS, Express, MySQL(MariaDB). 
